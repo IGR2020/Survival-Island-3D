@@ -11,10 +11,16 @@ public class Crafter : MonoBehaviour
 	public List<GameObject> recipeInfoObjects;
 	public CraftingData craftingData;
 	public CraftButton[] craftButtons;
-
+	[HideInInspector()]
+	public int activeButton = 0;
+	// Responsibility of uiHandler to reset this
+	[HideInInspector()]
+	public bool craftConfirmed = true;
 	private void Start()
 	{
 		CreateGUI();
+
+		OnCraftClick(activeButton);
 	}
 
 	public void CreateGUI()
@@ -30,9 +36,20 @@ public class Crafter : MonoBehaviour
 		}
 	}
 
+	public void ConfirmCraft()
+	{
+		craftConfirmed = true;
+	}
+
+	public Recipe GetCraftedRecipe()
+	{
+		return craftButtons[activeButton].recipe;
+	}
+
 	public void OnCraftClick(int index) 
 	{ 
-		print("Crafting Button " + index.ToString() + " has called") ; 
+		print("Crafting Button " + index.ToString() + " has called") ;
+		activeButton = index;
 		
 		ClearRecipeInfo();
 

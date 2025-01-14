@@ -270,7 +270,66 @@ public class Player : MonoBehaviour
 			else if (building.buildType == Interactable.BuildType.Crafting)
 			{
 				uiHandler.AllowCrating();
-				isCrafting = true;
+			}
+		}
+	}
+
+	public void CraftRecipe(Recipe recipe)
+	{
+		print("Crafting");
+		if (!isCrafting) return;
+		print("Valid Craft -> " + recipe.outputItems[0].name);
+
+		foreach (Item need in recipe.neededItems)
+		{
+			if (!InventoryContains(need))
+			{
+				return;
+			}
+		}
+		
+		foreach (Item need in recipe.neededItems)
+		{
+			SubtractItem(need);
+		}
+
+		foreach (Item output in recipe.outputItems)
+		{
+			AddItem(output);
+		}
+
+		uiHandler.UpdateSlots();
+	}
+
+	public bool InventoryContains(Item item)
+	{
+		foreach (Item containedItem in inventory)
+		{
+			if (containedItem.name == item.name && containedItem.count >= item.count)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void SubtractItem(Item item)
+	{
+		for (int i = 0; i<inventory.Count; i++)
+		{
+			Item containedItem = inventory[i];
+			if (containedItem.name == item.name)
+			{
+				containedItem.count -= item.count;
+				containedItem = Slot.SetEmptyIf0(containedItem);
+			}
+			if (containedItem.name != "Empty")
+			{
+				inventory[i] = containedItem;
+			}
+			else
+			{
+				inventory.RemoveAt(i);
 			}
 		}
 	}
@@ -285,27 +344,32 @@ public class Player : MonoBehaviour
 	{
 		for (int i = 0; i < table.drops.Length; i++)
 		{
-			bool foundMatch = false;
 			Item drop = simulatorData.structureData.FindItem(table.drops[i]);
 			drop.count = Random.Range(table.dropCountMin, table.dropCountMax);
 
-			for (int j = 0; j < inventory.Count; j++)
+			AddItem(drop);
+
+		}
+	}
+
+	public void AddItem(Item item1)
+	{
+		bool foundMatch = false;
+		for (int i = 0; i < inventory.Count; i++)
+		{
+			Item item2 = inventory[i];
+
+			if (item1.name == item2.name)
 			{
-				Item item = inventory[j];
-
-				if (drop.name == item.name)
-				{
-					inventory[j] =  new Item(item.name, item.count + drop.count, item.tags, item.tagData);
-					foundMatch = true;
-					break;
-				}
+				inventory[i] = new Item(item1.name, item1.count + item2.count, item2.tags, item2.tagData);
+				foundMatch = true;
+				break;
 			}
+		}
 
-			if (!foundMatch)
-			{
-				inventory.Add(drop);
-			}
-
+		if (!foundMatch)
+		{
+			inventory.Add(item1);
 		}
 	}
 }

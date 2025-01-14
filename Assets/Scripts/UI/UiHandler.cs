@@ -8,6 +8,7 @@ public class UiHandler : MonoBehaviour
 	public Slider hungerBar;
 	public Slider thirstBar;
 	public GameObject craftingUi;
+	public Crafter craftingHandler;
 	public List<Slot> slots;
 	public GameObject activeSlot = null;
 
@@ -23,6 +24,7 @@ public class UiHandler : MonoBehaviour
 	private void Start()
 	{
 		craftingUi.SetActive(false);
+		craftingHandler = craftingUi.GetComponent<Crafter>();
 
 		slotY = slots[0].GetComponent<RectTransform>().position.y;
 
@@ -30,13 +32,20 @@ public class UiHandler : MonoBehaviour
 		activeSlot = slots[activeSlotIndex].gameObject;
 		LiftSlot(0);
 
-		ForceUpdateAllSlots();
+		UpdateSlots();
 	}
 
 	public void AllowCrating() 
 	{
 		craftingUi.SetActive(true);
 	}
+
+	public void CraftConfirmed()
+	{
+		Recipe craftedRecipe = craftingHandler.GetCraftedRecipe();
+		player.CraftRecipe(craftedRecipe);
+	}
+
 	private void Update()
 	{
 		healthBar.value = Mathf.Clamp01(player.health / player.maxHealth);
@@ -44,6 +53,12 @@ public class UiHandler : MonoBehaviour
 		thirstBar.value = Mathf.Clamp01(player.thirst / player.maxThirst);
 
 		player.isCrafting = craftingUi.activeSelf;
+
+		if (craftingHandler.craftConfirmed)
+		{
+			craftingHandler.craftConfirmed = false;
+			CraftConfirmed();
+		}
 	}
 
 	public Texture2D FindItemTexture(string name)

@@ -95,6 +95,7 @@
     <Compile Include="Assets\Scripts\Structure\Sapling.cs" />
     <Compile Include="Assets\Scripts\UI\RespawnButton.cs" />
     <Compile Include="Assets\Bitgem\StylisedWater\URP\Scripts\Bitgem\VFX\StylisedWater\WateverVolumeFloater.cs" />
+    <Compile Include="Assets\Scripts\Crafting\ConfirmCraftButton.cs" />
     <Compile Include="Assets\Scripts\StructureData.cs" />
   </ItemGroup>
   <ItemGroup>
