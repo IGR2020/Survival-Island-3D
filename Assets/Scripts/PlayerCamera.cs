@@ -19,6 +19,10 @@ public class PlayerCamera : MonoBehaviour
 	public bool panToPlayer;
 	public float followSpeed;
 
+	public bool smoothLook = false;
+	[Range(0f, 1f)]
+	public float smoothLookSpeed = 0.1f;
+
 	public bool lookAtPlayer;
 	public float lookAtDelay;
 	public float lookForwardBy;
@@ -61,10 +65,20 @@ public class PlayerCamera : MonoBehaviour
 			transform.rotation = Quaternion.Lerp(oldRotation, newRotation, Mathf.Clamp01(lookSpeed * Time.deltaTime));
 			lookDirection = new Vector2(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y);
 		}
-		else
+		else if (!smoothLook)
 		{
 			transform.rotation = Quaternion.Euler(lookDirection.y, lookDirection.x, 0);
 			timeSinceLastLook += Time.deltaTime;
+		}
+		else
+		{
+			transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(lookDirection.y, lookDirection.x, 0), smoothLookSpeed);
+			timeSinceLastLook += Time.deltaTime;
+		}
+
+		if (!lookAtPlayer)
+		{
+			timeSinceLastLook = 0;
 		}
 
 		if (rotateTargetY)

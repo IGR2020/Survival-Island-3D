@@ -29,19 +29,8 @@ public class Slot : MonoBehaviour
 	public void UpdateImage()
 	{
 		count.text = (item.count < 1) ? "" : item.count.ToString();
-		Texture2D texture = null;
-		foreach (ItemTexture itemTexture in uiHandler.itemTextures)
-		{
-			if (itemTexture.name == item.name)
-			{
-				texture = itemTexture.texture;
-				break;
-			}
-		}
 
-		if (texture == null) { print("Image not found"); return; }
-
-		itemImage.texture = texture;
+		itemImage.texture = uiHandler.FindItemTexture(item.name);
 	}
 
 	public void IsPressed()

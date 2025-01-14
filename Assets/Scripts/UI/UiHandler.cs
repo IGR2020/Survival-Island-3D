@@ -1,6 +1,4 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
@@ -8,6 +6,8 @@ public class UiHandler : MonoBehaviour
 {
 	public Slider healthBar;
 	public Slider hungerBar;
+	public Slider thirstBar;
+	public GameObject craftingUi;
 	public List<Slot> slots;
 	public GameObject activeSlot = null;
 
@@ -15,24 +15,48 @@ public class UiHandler : MonoBehaviour
 	public int lift;
 
 	public Player player;
+	public Texture2D missingTexture;
 	public ItemTexture[] itemTextures;
 
 	int activeSlotIndex;
 
 	private void Start()
 	{
+		craftingUi.SetActive(false);
+
 		slotY = slots[0].GetComponent<RectTransform>().position.y;
 
 		activeSlotIndex = 0;
 		activeSlot = slots[activeSlotIndex].gameObject;
 		LiftSlot(0);
 
+		ForceUpdateAllSlots();
 	}
 
+	public void AllowCrating() 
+	{
+		craftingUi.SetActive(true);
+	}
 	private void Update()
 	{
 		healthBar.value = Mathf.Clamp01(player.health / player.maxHealth);
 		hungerBar.value = Mathf.Clamp01(player.hunger / player.maxHunger);
+		thirstBar.value = Mathf.Clamp01(player.thirst / player.maxThirst);
+
+		player.isCrafting = craftingUi.activeSelf;
+	}
+
+	public Texture2D FindItemTexture(string name)
+	{
+		foreach (ItemTexture item in itemTextures)
+		{
+			if (item.name == name)
+			{
+				return item.texture;
+			}
+		}
+
+		return missingTexture;
 	}
 
 	public void SlotPressed(int index)

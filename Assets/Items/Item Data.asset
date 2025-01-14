@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Item Data
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  items:
+  - name: Sapling
+    count: 1
+    tags: []
+    tagData: []
+  - name: Stone
+    count: 1
+    tags: []
+    tagData: []
+  - name: Log
+    count: 1
+    tags:
+    - Build
+    tagData:
+    - 0
+  - name: Plank
+    count: 1
+    tags: []
+    tagData: []
+  - name: Leaf
+    count: 1
+    tags:
+    - Food
+    tagData:
+    - 1
+  - name: Stick
+    count: 1
+    tags: []
+    tagData: []
+  - name: Crafting Table
+    count: 1
+    tags:
+    - Build
+    tagData:
+    - 2
+  - name: Hammer
+    count: 1
+    tags:
+    - Interacter
+    tagData: []

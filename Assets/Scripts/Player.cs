@@ -1,9 +1,6 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 
 [RequireComponent(typeof(CharacterController))]
 public class Player : MonoBehaviour
@@ -24,9 +21,16 @@ public class Player : MonoBehaviour
 	public float hunger = 100;
 	[HideInInspector()]
 	public float maxHunger = 100;
+	[HideInInspector()]
+	public float thirst = 100;
+	[HideInInspector()]
+	public float maxThirst = 100;
 	[Range(0f, 0.4f)]
 	public float speedToHungerDrain = 0.2f;
+	[Range(0f, 1f)]
+	public float speedToThirstDrain = 0.2f;
 	public float hungerToHealthDrain = 1f;
+	public float thirstToHealthDrain = 1f;
 	public List<Item> inventory = new List<Item>();
 
 	PlayerCamera playerCamera;
@@ -47,6 +51,9 @@ public class Player : MonoBehaviour
 	StructureDataPoint buildStructure;
 	Vector3 buildRotationOffset;
 	GameObject buildPreview;
+
+	[HideInInspector()]
+	public bool isCrafting = false;
 
 	private void Start()
 	{
@@ -92,10 +99,16 @@ public class Player : MonoBehaviour
 		}
 
 		hunger -= (Mathf.Abs(velocity.x) + Mathf.Abs(velocity.z)) * Time.deltaTime * speedToHungerDrain;
+		thirst -= (Mathf.Abs(velocity.x) + Mathf.Abs(velocity.z)) * Time.deltaTime * speedToThirstDrain;
 
 		if (hunger < 1)
 		{
 			health -= Time.deltaTime * hungerToHealthDrain;
+		}
+
+		if (thirst < 1)
+		{
+			health -= Time.deltaTime * thirstToHealthDrain;
 		}
 
 		if (health < 1)
@@ -132,6 +145,8 @@ public class Player : MonoBehaviour
 	public void OnInteract(InputAction.CallbackContext context)
 	{
         if (!context.started) return;
+
+		if (isCrafting) return;
 
         Item heldItem = uiHandler.GetHeldItem();
 		if (heldItem.name == "Empty")
@@ -233,7 +248,9 @@ public class Player : MonoBehaviour
 			return;
 		}
 
-		if (Physics.Raycast(transform.position, playerCamera.transform.forward, out RaycastHit hitInfo,attackRange))
+		if (isCrafting) return;
+
+		if (Physics.Raycast(transform.position, playerCamera.transform.forward, out RaycastHit hitInfo, attackRange))
 		{
 			GameObject hitObject = hitInfo.collider.gameObject;
 			Structure structure = hitObject.GetComponent<Structure>();
@@ -243,8 +260,18 @@ public class Player : MonoBehaviour
 				return;
 			}
 
-			mostRecentAttackedStructure = structure;
-			structure.Hit(attackStrength, OnWin);
+			Interactable building = hitObject.GetComponent<Interactable>();
+			if (building == null || !uiHandler.GetHeldItem().tags.Contains("Interacter"))
+			{
+				mostRecentAttackedStructure = structure;
+				structure.Hit(attackStrength, OnWin);
+			}
+			else if (building == null) { return; }
+			else if (building.buildType == Interactable.BuildType.Crafting)
+			{
+				uiHandler.AllowCrating();
+				isCrafting = true;
+			}
 		}
 	}
 

@@ -16,6 +16,10 @@ public class Structure : MonoBehaviour
 	float timeSinceLastHit;
 	float maxHealth = 5;
 
+	bool useChildRenderer = false;
+	MeshRenderer[] childRenderers;
+	Material[] defaultChildMaterials;
+
 	System.Action mostRecentAttacker = null;
 
 	private void Start()
@@ -25,10 +29,24 @@ public class Structure : MonoBehaviour
 		{
 			simulator = FindFirstObjectByType<SimulatorData>();
 		}
-		defaultMaterial = meshRenderer.material;
 
 		hitDelay = simulator.hitDelay;
+
+		if (meshRenderer == null)
+		{
+			useChildRenderer = true;
+			childRenderers = GetComponentsInChildren<MeshRenderer>();
+			defaultChildMaterials = new Material[childRenderers.Length];
+			for (int i = 0; i < childRenderers.Length; i++)
+			{
+				defaultChildMaterials[i] = childRenderers[i].material;
+			}
 		}
+		else
+		{
+			defaultMaterial = meshRenderer.material;
+		}
+	}
 
 	private void Update()
 	{
@@ -53,14 +71,24 @@ public class Structure : MonoBehaviour
 		{
 			return;
 		}
-		mostRecentAttacker = callback;	
+		mostRecentAttacker = callback;
 		health -= attackStrength;
 
 		if (health < 0) OnDeath();
 
 		timeSinceLastHit = 0;
 		isHit = true;
-		meshRenderer.material = simulator.hitMaterial;
+		if (!useChildRenderer)
+		{
+			meshRenderer.material = simulator.hitMaterial;
+		}
+		else
+		{
+			foreach (MeshRenderer child in childRenderers)
+			{
+				child.material = simulator.hitMaterial;
+			}
+		}
 	}
 
 	public void OnDeath()
@@ -78,7 +106,17 @@ public class Structure : MonoBehaviour
 			if (timeSinceLastHit > hitDelay)
 			{
 				isHit = false;
-				meshRenderer.material = defaultMaterial;
+				if (!useChildRenderer)
+				{
+					meshRenderer.material = defaultMaterial;
+				}
+				else
+				{
+					for (int i = 0; i < childRenderers.Length; i++)
+					{
+						childRenderers[i].material = defaultChildMaterials[i];
+					}
+				}
 			}
 		}
 	}

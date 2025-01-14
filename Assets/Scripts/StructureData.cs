@@ -8,7 +8,7 @@ public class StructureData : ScriptableObject
 	public StructureDataPoint[] playerStructures;
 	public StructureDataPoint generic;
 	public LootTable[] lootTables;
-	public Item[] items;
+	public ItemData itemData;
 	public LootTable FindLootTable(string name)
 	{
 		for (int i = 0; i < lootTables.Length; i++)
@@ -38,11 +38,11 @@ public class StructureData : ScriptableObject
 
 	public Item FindItem(string name)
 	{
-		for (int i = 0;i < items.Length;i++)
+		for (int i = 0;i < itemData.items.Length;i++)
 		{
-			if (items[i].name == name)
+			if (itemData.items[i].name == name)
 			{
-				return items[i];
+				return itemData.items[i];
 			}
 		}
 

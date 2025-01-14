@@ -13,22 +13,22 @@ MonoBehaviour:
   m_Name: Default Structure Data
   m_EditorClassIdentifier: 
   structures:
-  - name: Fadded Tree
-    structure: {fileID: 9021529859117273273, guid: cced9a6b02562ec4e995896219f18a08, type: 3}
-    minSpawnHeight: 0.5
-    maxSpawnHeight: 0.6
-    spacing: 2
-    useGeneric: 0
-    health: 7
-    lootTable: Tree
-  - name: Rock
-    structure: {fileID: 7363492874582727369, guid: 4e2648d4784208a4ea68922ef970c5bd, type: 3}
+  - name: Light Log
+    structure: {fileID: 2882763018194999971, guid: 05af29280a189974aac9931b72e2a812, type: 3}
     minSpawnHeight: 0.4
     maxSpawnHeight: 0.5
-    spacing: 8
+    spacing: 2
     useGeneric: 0
-    health: 30
-    lootTable: Stone
+    health: 5
+    lootTable: Wood
+  - name: Summer Tree
+    structure: {fileID: 8501312395752422624, guid: 71645a43cffafe844beceddef07f491e, type: 3}
+    minSpawnHeight: 0.4
+    maxSpawnHeight: 0.5
+    spacing: 4
+    useGeneric: 0
+    health: 10
+    lootTable: Tree
   - name: Forest Tree
     structure: {fileID: 3954072599065167689, guid: f4f19db4660a6b742946b362cce41566, type: 3}
     minSpawnHeight: 0.4
@@ -37,6 +37,38 @@ MonoBehaviour:
     useGeneric: 0
     health: 10
     lootTable: Tree
+  - name: Fadded Tree
+    structure: {fileID: 9021529859117273273, guid: cced9a6b02562ec4e995896219f18a08, type: 3}
+    minSpawnHeight: 0.5
+    maxSpawnHeight: 0.6
+    spacing: 2
+    useGeneric: 0
+    health: 7
+    lootTable: Tree
+  - name: Spring Tree
+    structure: {fileID: 8352761300556796246, guid: 8e4b6deae1aca0845a192cfce117208c, type: 3}
+    minSpawnHeight: 0.4
+    maxSpawnHeight: 0.5
+    spacing: 2
+    useGeneric: 0
+    health: 10
+    lootTable: Tree
+  - name: Bush 2
+    structure: {fileID: 4966406348133166471, guid: ac89d65b85a82ad42aa12b2dc496fdbc, type: 3}
+    minSpawnHeight: 0.4
+    maxSpawnHeight: 0.5
+    spacing: 2
+    useGeneric: 0
+    health: 2
+    lootTable: Plants
+  - name: Rock
+    structure: {fileID: 7363492874582727369, guid: 4e2648d4784208a4ea68922ef970c5bd, type: 3}
+    minSpawnHeight: 0.4
+    maxSpawnHeight: 0.5
+    spacing: 8
+    useGeneric: 0
+    health: 30
+    lootTable: Stone
   - name: Bush 1
     structure: {fileID: 8507515337038395333, guid: f0b5ee265528cf7468146c22e31e7f39, type: 3}
     minSpawnHeight: 0.4
@@ -53,38 +85,6 @@ MonoBehaviour:
     useGeneric: 0
     health: 5
     lootTable: Wood
-  - name: Spring Tree
-    structure: {fileID: 8352761300556796246, guid: 8e4b6deae1aca0845a192cfce117208c, type: 3}
-    minSpawnHeight: 0.4
-    maxSpawnHeight: 0.5
-    spacing: 2
-    useGeneric: 0
-    health: 10
-    lootTable: Tree
-  - name: Light Log
-    structure: {fileID: 2882763018194999971, guid: 05af29280a189974aac9931b72e2a812, type: 3}
-    minSpawnHeight: 0.4
-    maxSpawnHeight: 0.5
-    spacing: 2
-    useGeneric: 0
-    health: 5
-    lootTable: Wood
-  - name: Bush 2
-    structure: {fileID: 4966406348133166471, guid: ac89d65b85a82ad42aa12b2dc496fdbc, type: 3}
-    minSpawnHeight: 0.4
-    maxSpawnHeight: 0.5
-    spacing: 2
-    useGeneric: 0
-    health: 2
-    lootTable: Plants
-  - name: Summer Tree
-    structure: {fileID: 8501312395752422624, guid: 71645a43cffafe844beceddef07f491e, type: 3}
-    minSpawnHeight: 0.4
-    maxSpawnHeight: 0.5
-    spacing: 4
-    useGeneric: 0
-    health: 10
-    lootTable: Tree
   playerStructures:
   - name: Log
     structure: {fileID: 2278150660282032162, guid: e17c130dbf5ae4d4695bb3909fd68b51, type: 3}
@@ -102,6 +102,14 @@ MonoBehaviour:
     useGeneric: 0
     health: 3
     lootTable: Wood
+  - name: Crafting Table
+    structure: {fileID: 2855124937445836947, guid: 086929a1fdbfe5244aa157a71f1a073e, type: 3}
+    minSpawnHeight: 0
+    maxSpawnHeight: 0
+    spacing: 0
+    useGeneric: 0
+    health: 8
+    lootTable: Build
   generic:
     name: Generic Data
     structure: {fileID: 0}
@@ -135,28 +143,10 @@ MonoBehaviour:
     - Stone
     dropCountMin: 1
     dropCountMax: 5
-  items:
-  - name: Leaf
-    count: 1
-    tags:
-    - Food
-    tagData:
-    - 1
-  - name: Log
-    count: 1
-    tags:
-    - Build
-    tagData:
-    - 0
-  - name: Stick
-    count: 1
-    tags: []
-    tagData: []
-  - name: Sapling
-    count: 1
-    tags: []
-    tagData: []
-  - name: Stone
-    count: 1
-    tags: []
-    tagData: []
+  - name: Build
+    drops:
+    - Plank
+    - Stick
+    dropCountMin: 1
+    dropCountMax: 1
+  itemData: {fileID: 11400000, guid: fd66c1e7f6fc16943a8d5d950cae0880, type: 2}
