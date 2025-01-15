@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class UiHandler : MonoBehaviour
 {
+	public GameObject presetGroundedItem;
 	public Slider healthBar;
 	public Slider hungerBar;
 	public Slider thirstBar;
@@ -16,8 +17,8 @@ public class UiHandler : MonoBehaviour
 	public int lift;
 
 	public Player player;
-	public Texture2D missingTexture;
-	public ItemTexture[] itemTextures;
+	public Sprite missingTexture;
+	public ItemSprite[] itemTextures;
 
 	int activeSlotIndex;
 
@@ -61,13 +62,13 @@ public class UiHandler : MonoBehaviour
 		}
 	}
 
-	public Texture2D FindItemTexture(string name)
+	public Sprite FindItemSprite(string name)
 	{
-		foreach (ItemTexture item in itemTextures)
+		foreach (ItemSprite item in itemTextures)
 		{
 			if (item.name == name)
 			{
-				return item.texture;
+				return item.sprite;
 			}
 		}
 
@@ -125,8 +126,8 @@ public class UiHandler : MonoBehaviour
 }
 
 [System.Serializable]
-public struct ItemTexture
+public struct ItemSprite
 {
 	public string name;
-	public Texture2D texture;
+	public Sprite sprite;
 }

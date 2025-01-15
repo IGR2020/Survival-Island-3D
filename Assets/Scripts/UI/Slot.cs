@@ -7,7 +7,7 @@ public class Slot : MonoBehaviour
 {
 	public int index;
     public Item item;
-	public RawImage itemImage;
+	public Image itemImage;
 	TMP_Text count;
 
 	UiHandler uiHandler;
@@ -30,7 +30,7 @@ public class Slot : MonoBehaviour
 	{
 		count.text = (item.count < 1) ? "" : item.count.ToString();
 
-		itemImage.texture = uiHandler.FindItemTexture(item.name);
+		itemImage.sprite = uiHandler.FindItemSprite(item.name);
 	}
 
 	public void IsPressed()

@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 [RequireComponent(typeof(Collider))]
 public class Structure : MonoBehaviour
@@ -9,6 +10,7 @@ public class Structure : MonoBehaviour
 	public string structureName;
 
 	SimulatorData simulator = null;
+	UiHandler uiHandler = null;
 	MeshRenderer meshRenderer;
 	Material defaultMaterial;
 
@@ -20,15 +22,12 @@ public class Structure : MonoBehaviour
 	MeshRenderer[] childRenderers;
 	Material[] defaultChildMaterials;
 
-	System.Action mostRecentAttacker = null;
 
 	private void Start()
 	{
 		meshRenderer = GetComponent<MeshRenderer>();
-		if (simulator == null)
-		{
-			simulator = FindFirstObjectByType<SimulatorData>();
-		}
+		simulator = FindFirstObjectByType<SimulatorData>();
+		uiHandler = FindFirstObjectByType<UiHandler>();
 
 		hitDelay = simulator.hitDelay;
 
@@ -65,13 +64,12 @@ public class Structure : MonoBehaviour
 		drops = simulator.structureData.FindLootTable(dataPoint.lootTable);
 	}
 
-	public void Hit(int attackStrength, System.Action callback)
+	public void Hit(int attackStrength)
 	{
 		if (isHit)
 		{
 			return;
 		}
-		mostRecentAttacker = callback;
 		health -= attackStrength;
 
 		if (health < 0) OnDeath();
@@ -93,9 +91,15 @@ public class Structure : MonoBehaviour
 
 	public void OnDeath()
 	{
-		mostRecentAttacker();
+		for (int i = 0; i < drops.drops.Length; i++)
+		{
+			Item drop = simulator.structureData.FindItem(drops.drops[i]);
+			drop.count = Random.Range(drops.dropCountMin, drops.dropCountMax);
 
-		Destroy(gameObject);
+			GroundedItem item = Instantiate(uiHandler.presetGroundedItem, transform.position + Vector3.up * 3, transform.rotation).GetComponent<GroundedItem>();
+			item.item = drop;
+		}
+			Destroy(gameObject);
 	}
 
 	public void IfIsHit()

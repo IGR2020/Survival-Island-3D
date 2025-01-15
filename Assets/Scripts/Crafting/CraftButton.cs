@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class CraftButton : MonoBehaviour
 {
-    public RawImage image;
+    public Image image;
     public Recipe recipe;
 	public int index;
 
@@ -15,7 +15,7 @@ public class CraftButton : MonoBehaviour
         uiHandler = FindFirstObjectByType<UiHandler>();
 		crafter = FindFirstObjectByType<Crafter>();
 
-        image.texture = uiHandler.FindItemTexture(recipe.outputItems[0].name);
+        image.sprite = uiHandler.FindItemSprite(recipe.outputItems[0].name);
 	}
 
 	public void OnClick()

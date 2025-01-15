@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(CharacterController))]
 public class Player : MonoBehaviour
@@ -31,6 +32,7 @@ public class Player : MonoBehaviour
 	public float speedToThirstDrain = 0.2f;
 	public float hungerToHealthDrain = 1f;
 	public float thirstToHealthDrain = 1f;
+	public int maxInventorySize = 7;
 	public List<Item> inventory = new List<Item>();
 
 	PlayerCamera playerCamera;
@@ -156,6 +158,15 @@ public class Player : MonoBehaviour
 
 		bool buildingInteration = false;
 
+		if (!buildMode && Physics.Raycast(transform.position, playerCamera.transform.forward, out RaycastHit ray, attackRange))
+		{
+			Interactable interacter = ray.collider.gameObject.GetComponent<Interactable>();
+			if (interacter != null) { 
+				if (interacter.buildType == Interactable.BuildType.Crafting) uiHandler.AllowCrating();
+				return;
+			}
+		}
+
 		if (heldItem.tags.Contains("Food"))
 		{
 			print("Consuming Food");
@@ -182,12 +193,12 @@ public class Player : MonoBehaviour
 			buildStructure = simulatorData.structureData.playerStructures[(int)heldItem.tagData[0]];
 			if (!buildMode) {
 				buildMode = false;
-				if (Physics.Raycast(transform.position, playerCamera.transform.forward, out RaycastHit ray, attackRange))
+				if (Physics.Raycast(transform.position, playerCamera.transform.forward, out RaycastHit castedRay, attackRange))
 				{
-					if (ray.collider.gameObject.name == "Terrain Mass")
+					if (castedRay.collider.gameObject.name == "Terrain Mass")
 					{ 
 						buildMode = true; 
-						buildPreview = Instantiate(buildStructure.structure, ray.point, transform.rotation, ray.collider.gameObject.transform);
+						buildPreview = Instantiate(buildStructure.structure, castedRay.point, transform.rotation, castedRay.collider.gameObject.transform);
 						buildPreview.GetComponent<Structure>().enabled = false;
 						buildPreview.GetComponent<Collider>().enabled = false;
 					}
@@ -259,18 +270,8 @@ public class Player : MonoBehaviour
 			{
 				return;
 			}
-
-			Interactable building = hitObject.GetComponent<Interactable>();
-			if (building == null || !uiHandler.GetHeldItem().tags.Contains("Interacter"))
-			{
-				mostRecentAttackedStructure = structure;
-				structure.Hit(attackStrength, OnWin);
-			}
-			else if (building == null) { return; }
-			else if (building.buildType == Interactable.BuildType.Crafting)
-			{
-				uiHandler.AllowCrating();
-			}
+			mostRecentAttackedStructure = structure;
+			structure.Hit(attackStrength);
 		}
 	}
 
@@ -334,27 +335,9 @@ public class Player : MonoBehaviour
 		}
 	}
 
-	public void OnWin()
+	// Returns if adding of item was successful
+	public bool AddItem(Item item1)
 	{
-		AddLootTable(mostRecentAttackedStructure.drops);
-		uiHandler.UpdateSlots();
-	}
-
-	public void AddLootTable(LootTable table)
-	{
-		for (int i = 0; i < table.drops.Length; i++)
-		{
-			Item drop = simulatorData.structureData.FindItem(table.drops[i]);
-			drop.count = Random.Range(table.dropCountMin, table.dropCountMax);
-
-			AddItem(drop);
-
-		}
-	}
-
-	public void AddItem(Item item1)
-	{
-		bool foundMatch = false;
 		for (int i = 0; i < inventory.Count; i++)
 		{
 			Item item2 = inventory[i];
@@ -362,14 +345,15 @@ public class Player : MonoBehaviour
 			if (item1.name == item2.name)
 			{
 				inventory[i] = new Item(item1.name, item1.count + item2.count, item2.tags, item2.tagData);
-				foundMatch = true;
-				break;
+				return true;
 			}
 		}
 
-		if (!foundMatch)
+		if (inventory.Count < maxInventorySize)
 		{
 			inventory.Add(item1);
+			return true;
 		}
+		return false;
 	}
 }
