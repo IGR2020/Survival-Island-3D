@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: Basic Crafts
-  m_EditorClassIdentifier: Assembly-CSharp::CraftingData
+  m_Script: {fileID: 11500000, guid: 0e2d658258892a34caeee738e30dae0e, type: 3}
+  m_Name: Basic Crafting Data
+  m_EditorClassIdentifier: 
   recipes:
   - neededItems:
     - name: Log
@@ -20,26 +20,36 @@ MonoBehaviour:
       tagData: []
     outputItems:
     - name: Plank
-      count: 2
-      tags: []
-      tagData: []
-  - neededItems:
-    - name: Stone
       count: 3
-      tags: []
-      tagData: []
-    outputItems:
-    - name: Smooth Stone
-      count: 2
       tags: []
       tagData: []
   - neededItems:
     - name: Stick
-      count: 6
+      count: 3
       tags: []
       tagData: []
     outputItems:
     - name: Plank
+      count: 1
+      tags: []
+      tagData: []
+  - neededItems:
+    - name: Plank
+      count: 4
+      tags: []
+      tagData: []
+    outputItems:
+    - name: Crate
+      count: 1
+      tags: []
+      tagData: []
+  - neededItems:
+    - name: Plank
+      count: 3
+      tags: []
+      tagData: []
+    outputItems:
+    - name: Crafting Table
       count: 1
       tags: []
       tagData: []

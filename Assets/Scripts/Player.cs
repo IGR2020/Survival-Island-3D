@@ -64,7 +64,7 @@ public class Player : MonoBehaviour
 	public GameObject buildPreview;
 
 	[HideInInspector()]
-	public bool isCrafting = false;
+	public bool isUsingGui = false;
 
 	private void Start()
 	{
@@ -86,7 +86,7 @@ public class Player : MonoBehaviour
 	{
 		if (!mapGenerator.hasAssignedFallOffMap) {print("waiting"); return; }
 
-		playerCamera.lockRotation = isCrafting;
+		playerCamera.lockRotation = isUsingGui;
 
 		if (!controller.isGrounded)
 		{
@@ -157,23 +157,27 @@ public class Player : MonoBehaviour
 	{
         if (!context.started) return;
 
-		if (isCrafting) return;
-
-        Item heldItem = uiHandler.GetHeldItem();
-		if (heldItem.name == "Empty")
-		{
-			return;
-		}
+		if (isUsingGui) return;
 
 		bool buildingInteration = false;
 
 		if (!buildMode && Physics.Raycast(transform.position, playerCamera.transform.forward, out RaycastHit ray, attackRange))
 		{
 			Interactable interacter = ray.collider.gameObject.GetComponent<Interactable>();
+			if (interacter == null) {
+				interacter = ray.collider.transform.parent.GetComponent<Interactable>();
+			}
 			if (interacter != null) { 
 				if (interacter.buildType == Interactable.BuildType.Crafting) uiHandler.AllowCrating();
+				if (interacter.buildType == Interactable.BuildType.Crate) interacter.GetComponent<Storage>().Activate();
 				return;
 			}
+		}
+
+		Item heldItem = uiHandler.GetHeldItem();
+		if (heldItem.name == "Empty")
+		{
+			return;
 		}
 
 		if (heldItem.tags.Contains("Food"))
@@ -238,6 +242,11 @@ public class Player : MonoBehaviour
 			heldItem.count -= 1;
 		}
 
+		else
+		{
+			DropItem();
+		}
+
 		if (!buildingInteration)
 		{
 			if (buildMode)
@@ -276,7 +285,7 @@ public class Player : MonoBehaviour
 			return;
 		}
 
-		if (isCrafting) return;
+		if (isUsingGui) return;
 
 		if (Physics.Raycast(transform.position, playerCamera.transform.forward, out RaycastHit hitInfo, attackRange))
 		{
@@ -290,15 +299,11 @@ public class Player : MonoBehaviour
 			mostRecentAttackedStructure = structure;
 			structure.Hit(attackStrength);
 		}
-		else
-		{
-			DropItem();
-		}
 	}
 
 	public void CraftRecipe(Recipe recipe)
 	{
-		if (!isCrafting) return;
+		if (!isUsingGui) return;
 
 		foreach (Item need in recipe.neededItems)
 		{

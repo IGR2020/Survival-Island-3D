@@ -14,6 +14,7 @@ public class UiHandler : MonoBehaviour
 	public Slider hungerBar;
 	public Slider thirstBar;
 	public GameObject craftingUi;
+	public GameObject inventoryUi;
 	public Crafter craftingHandler;
 	public List<Slot> slots;
 	public GameObject activeSlot = null;
@@ -41,6 +42,8 @@ public class UiHandler : MonoBehaviour
 		craftingUi.SetActive(false);
 		craftingHandler = craftingUi.GetComponent<Crafter>();
 
+		inventoryUi.SetActive(false);
+
 		slotY = slots[0].GetComponent<RectTransform>().position.y;
 
 		activeSlotIndex = 0;
@@ -50,6 +53,11 @@ public class UiHandler : MonoBehaviour
 		foreach (Slot slot in slots)
 		{
 			slot.item = Slot.SetEmptyIf0(slot.item);
+		}
+
+		for (int i = 0; i < slots.Count; i++)
+		{
+			slots[i].index = i;
 		}
 
 		UpdateSlots();
@@ -72,7 +80,7 @@ public class UiHandler : MonoBehaviour
 		hungerBar.value = Mathf.Clamp01(player.hunger / player.maxHunger);
 		thirstBar.value = Mathf.Clamp01(player.thirst / player.maxThirst);
 
-		player.isCrafting = craftingUi.activeSelf;
+		player.isUsingGui = craftingUi.activeSelf || inventoryUi.activeSelf;
 
 		if (craftingHandler.craftConfirmed)
 		{

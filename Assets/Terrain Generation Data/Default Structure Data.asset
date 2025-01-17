@@ -165,4 +165,4 @@ MonoBehaviour:
     - Stick
     dropCountMin: 1
     dropCountMax: 1
-  itemData: {fileID: 11400000, guid: fd66c1e7f6fc16943a8d5d950cae0880, type: 2}
+  itemData: {fileID: 11400000, guid: cfa029f1e92806941931cc68615f3ae2, type: 2}

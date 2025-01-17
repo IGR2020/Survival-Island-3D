@@ -10,11 +10,15 @@ public class Slot : MonoBehaviour
 	public Image itemImage;
 	TMP_Text count;
 
+	public enum SendMessageTo {UiHandler, InventoryDisplay};
+	public SendMessageTo messageTo;
 	UiHandler uiHandler;
+	InventoryDisplay inventoryDisplay;
 
 	private void Start()
 	{
 		uiHandler = FindFirstObjectByType<UiHandler>();
+		inventoryDisplay = FindFirstObjectByType<InventoryDisplay>();
 		count = GetComponentInChildren<TMP_Text>();
 		print("Text object found as " + count.gameObject.name);
 		UpdateImage();
@@ -35,7 +39,14 @@ public class Slot : MonoBehaviour
 
 	public void IsPressed()
 	{
-		uiHandler.SlotPressed(index);
+        if (messageTo == SendMessageTo.InventoryDisplay)
+        {
+			inventoryDisplay.OnSlotClicked(index);
+        }
+		else
+		{
+			uiHandler.SlotPressed(index);
+		}
 	}
 
 	public static Item SetEmptyIf0(Item item)
@@ -48,5 +59,14 @@ public class Slot : MonoBehaviour
 			item.tagData = new List<float>();
 		}
 		return item;
+	}
+
+	// Returns swaped item
+	public Item SwapItems(Item other)
+	{
+		Item temp = other;
+		other = item;
+		item = temp;
+		return other;
 	}
 }

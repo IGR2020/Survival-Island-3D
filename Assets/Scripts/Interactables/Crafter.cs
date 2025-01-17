@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
+using NUnit.Framework;
 
 public class Crafter : MonoBehaviour
 {
@@ -51,7 +52,7 @@ public class Crafter : MonoBehaviour
 		print("Crafting Button " + index.ToString() + " has called") ;
 		activeButton = index;
 		
-		ClearRecipeInfo();
+		recipeInfoObjects = ClearGameObjectList(recipeInfoObjects);
 
 		CraftButton craftButton = craftButtons[index];
 
@@ -80,20 +81,16 @@ public class Crafter : MonoBehaviour
 		}
 	}
 
-	public void ClearRecipeInfo()
+	public static List<GameObject> ClearGameObjectList(List<GameObject> values)
 	{
-		foreach (GameObject infoObject in recipeInfoObjects)
+		foreach (GameObject value in values)
 		{
-			Destroy(infoObject);
+			Destroy(value);
 		}
-		recipeInfoObjects.Clear();
-	}
-}
+		values.Clear();
 
-[CreateAssetMenu()]
-public class CraftingData : ScriptableObject
-{
-    public Recipe[] recipes;
+		return values;
+	}
 }
 
 [System.Serializable]
@@ -101,10 +98,4 @@ public struct Recipe
 {
     public Item[] neededItems;
     public Item[] outputItems;
-}
-
-[CreateAssetMenu()]
-public class ItemData : ScriptableObject
-{
-	public Item[] items;
 }

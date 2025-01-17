@@ -1,19 +1,36 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Storage : MonoBehaviour
 {
 	public int storageCount;
-    public GameObject slotUiContainerPreset;
+    public InventoryDisplay inventory;
     UiHandler uiHandler;
-	Slot slots;
+	Item[] slots;
 
 	private void Start()
 	{
-		uiHandler = GetComponent<UiHandler>();
+		uiHandler = FindFirstObjectByType<UiHandler>();
+		inventory = FindAnyObjectByType<InventoryDisplay>();
+		slots = new Item[storageCount];
 	}
 
-	public void SlotClick(int index)
-    {
+	public void Activate()
+	{
+		inventory.gameObject.SetActive(true);
+		inventory.onClickCallback = OnSlotClick;
+		inventory.SetSlotCount(storageCount);
+	}
 
-    }
+	public void OnSlotClick()
+    {
+		Slot activeSlot = inventory.GetActiveSlot();
+		Item heldItem = uiHandler.GetHeldItem();
+
+		heldItem = activeSlot.SwapItems(heldItem);
+		uiHandler.SetHeldItem(heldItem);
+		inventory.SetActiveItem(activeSlot.item);
+
+		slots[inventory.activeSlot] = inventory.GetActiveItem();
+	}
 }

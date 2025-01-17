@@ -82,9 +82,12 @@
     <Compile Include="Assets\Scripts\UI\SceneLoaderCallback.cs" />
     <Compile Include="Assets\Scripts\FallOffMapGenerator.cs" />
     <Compile Include="Assets\Scripts\TextureGenrator.cs" />
+    <Compile Include="Assets\Scripts\UI\InventoryDisplay.cs" />
+    <Compile Include="Assets\Scripts\Interactables\ItemData.cs" />
     <Compile Include="Assets\Scripts\UI\UiHandler.cs" />
     <Compile Include="Assets\Scripts\Interactables\Crafter.cs" />
     <Compile Include="Assets\Scripts\UI\CloseButton.cs" />
+    <Compile Include="Assets\Scripts\Interactables\CraftingData.cs" />
     <Compile Include="Assets\Scripts\Island.cs" />
     <Compile Include="Assets\Scripts\Interactables\ConfirmCraftButton.cs" />
     <Compile Include="Assets\Scripts\UI\Slot.cs" />
