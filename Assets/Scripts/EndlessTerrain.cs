@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public class EndlessTerrain : MonoBehaviour
 {
+	public string terrainMask;
 	public static float maxViewDist = 300;
 	float sqrViewerMoveDistForUpdate = 30;
 
@@ -138,7 +139,7 @@ public class EndlessTerrain : MonoBehaviour
 				}
 				else
 				{
-					massDict.Add(viewedMassCord, new TerrainMass(viewedMassCord, massSize, detailLevels, transform));
+					massDict.Add(viewedMassCord, new TerrainMass(viewedMassCord, massSize, detailLevels, transform, terrainMask));
 				}
 			}
 		}
@@ -162,7 +163,7 @@ public class EndlessTerrain : MonoBehaviour
 		LODMesh lodMesh;
 		LODInfo[] detailLevels;
 
-		public TerrainMass(Vector2 coord, int size, LODInfo[] detailLevels, Transform parent) 
+		public TerrainMass(Vector2 coord, int size, LODInfo[] detailLevels, Transform parent, string layer) 
 		{
 			position = coord * size;
 			bounds = new Bounds(position, Vector2.one * size);
@@ -184,7 +185,7 @@ public class EndlessTerrain : MonoBehaviour
 			meshObject.transform.position = positionV3;
 			meshObject.transform.localScale = parent.localScale;
 			meshObject.transform.parent = parent;
-			
+			meshObject.layer = LayerMask.NameToLayer(layer);
 
 			SetVisible(false);
 

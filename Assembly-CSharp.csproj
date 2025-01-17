@@ -64,8 +64,10 @@
     <Compile Include="Assets\Scripts\Structure\Interactable.cs" />
     <Compile Include="Assets\Bitgem\StylisedWater\URP\Scripts\Bitgem\VFX\StylisedWater\WaterVolumeBox.cs" />
     <Compile Include="Assets\Scripts\MapGenerator.cs" />
+    <Compile Include="Assets\Scripts\Interactables\GroundedItem.cs" />
     <Compile Include="Assets\Bitgem\StylisedWater\URP\Scripts\Bitgem\VFX\StylisedWater\WaterVolumeBase.cs" />
     <Compile Include="Assets\Scripts\NoiseData.cs" />
+    <Compile Include="Assets\Scripts\Interactables\CraftButton.cs" />
     <Compile Include="Assets\Scripts\EndlessTerrain.cs" />
     <Compile Include="Assets\Bitgem\StylisedWater\URP\Scripts\Bitgem\VFX\StylisedWater\WaterVolumeTransforms.cs" />
     <Compile Include="Assets\Scripts\UI\ReturnToMainMenu.cs" />
@@ -75,27 +77,26 @@
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\Structure\Building.cs" />
     <Compile Include="Assets\Bitgem\StylisedWater\URP\Scripts\Bitgem\VFX\StylisedWater\WaterVolumeHelper.cs" />
-    <Compile Include="Assets\Scripts\Crafting\GroundedItem.cs" />
-    <Compile Include="Assets\Scripts\Crafting\Crafter.cs" />
     <Compile Include="Assets\Scripts\PlayerCamera.cs" />
     <Compile Include="Assets\Scripts\SimulatorData.cs" />
     <Compile Include="Assets\Scripts\UI\SceneLoaderCallback.cs" />
-    <Compile Include="Assets\Scripts\Crafting\CraftButton.cs" />
     <Compile Include="Assets\Scripts\FallOffMapGenerator.cs" />
     <Compile Include="Assets\Scripts\TextureGenrator.cs" />
     <Compile Include="Assets\Scripts\UI\UiHandler.cs" />
+    <Compile Include="Assets\Scripts\Interactables\Crafter.cs" />
     <Compile Include="Assets\Scripts\UI\CloseButton.cs" />
     <Compile Include="Assets\Scripts\Island.cs" />
+    <Compile Include="Assets\Scripts\Interactables\ConfirmCraftButton.cs" />
     <Compile Include="Assets\Scripts\UI\Slot.cs" />
     <Compile Include="Assets\Scripts\UI\PlayButton.cs" />
     <Compile Include="Assets\Scripts\StructureGenerator.cs" />
+    <Compile Include="Assets\Scripts\Interactables\Storage.cs" />
     <Compile Include="Assets\Scripts\Structure.cs" />
     <Compile Include="Assets\Scripts\UI\SceneLoader.cs" />
     <Compile Include="Assets\Scripts\RegionData.cs" />
     <Compile Include="Assets\Scripts\Structure\Sapling.cs" />
     <Compile Include="Assets\Scripts\UI\RespawnButton.cs" />
     <Compile Include="Assets\Bitgem\StylisedWater\URP\Scripts\Bitgem\VFX\StylisedWater\WateverVolumeFloater.cs" />
-    <Compile Include="Assets\Scripts\Crafting\ConfirmCraftButton.cs" />
     <Compile Include="Assets\Scripts\StructureData.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -29,8 +29,10 @@ MonoBehaviour:
     - 0
   - name: Plank
     count: 1
-    tags: []
-    tagData: []
+    tags:
+    - Build
+    tagData:
+    - 3
   - name: Leaf
     count: 1
     tags:

@@ -8,6 +8,7 @@ public class PlayerCamera : MonoBehaviour
 	public GameObject target;
 	public OnScreenStick lookStick;
 	public bool useMobileControls;
+	// rotates the target object's (player's) Y 
 	public bool rotateTargetY;
 
 	public float zoom;
@@ -28,9 +29,10 @@ public class PlayerCamera : MonoBehaviour
 	public float lookForwardBy;
 	public float lookSpeed;
 
+	public bool lockRotation;
+
 	Vector2 lookDirection;
 	float timeSinceLastLook = 0;
-
 
 	void Start()
 	{
@@ -57,7 +59,8 @@ public class PlayerCamera : MonoBehaviour
 			transform.LookAt(lookAtTarget);
 		}
 
-		if (lookAtPlayer && timeSinceLastLook > lookAtDelay)
+		if (lockRotation) { }
+		else if (lookAtPlayer && timeSinceLastLook > lookAtDelay)
 		{
 			Quaternion oldRotation = transform.rotation;
 			transform.LookAt(lookAtTarget);

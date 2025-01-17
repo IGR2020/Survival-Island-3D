@@ -2,6 +2,8 @@ using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
 [RequireComponent(typeof(Collider))]
+// So that the size of the object may be known
+[RequireComponent (typeof(BoxCollider))]
 public class Structure : MonoBehaviour
 {
 	public LootTable drops;

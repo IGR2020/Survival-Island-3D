@@ -27,6 +27,10 @@ public class GroundedItem : MonoBehaviour
 	private void OnTriggerEnter(Collider collision)
 	{
 		print(collision.gameObject.name);
+	}
+
+	private void OnTriggerStay(Collider collision)
+	{
 		Player player = collision.gameObject.GetComponent<Player>();
 		if (player == null) { return; }
 		if (!player.AddItem(item)) return;

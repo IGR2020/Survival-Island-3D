@@ -32,6 +32,11 @@ public class Player : MonoBehaviour
 	public float speedToThirstDrain = 0.2f;
 	public float hungerToHealthDrain = 1f;
 	public float thirstToHealthDrain = 1f;
+	public LayerMask validBuildArea;
+	public LayerMask validPlantArea;
+	[Range(0f, 1f)]
+	public float buildPreviewTransparency;
+	public float throwStrength;
 	public int maxInventorySize = 7;
 	public List<Item> inventory = new List<Item>();
 
@@ -43,16 +48,20 @@ public class Player : MonoBehaviour
 	CharacterController controller;
 	MapGenerator mapGenerator;
 	SimulatorData simulatorData;
-	Building builder;
+	[HideInInspector()]
+	public Building builder;
 	UiHandler uiHandler;
 	Structure mostRecentAttackedStructure;
 
 	bool isGroundedLastFrame = false;
-	
-	bool buildMode = false;
+
+	[HideInInspector()]
+	public bool buildMode = false;
+	public Vector3 buildPreviewSize = Vector3.zero;
 	StructureDataPoint buildStructure;
 	Vector3 buildRotationOffset;
-	GameObject buildPreview;
+	[HideInInspector()]
+	public GameObject buildPreview;
 
 	[HideInInspector()]
 	public bool isCrafting = false;
@@ -76,6 +85,8 @@ public class Player : MonoBehaviour
 	private void Update()
 	{
 		if (!mapGenerator.hasAssignedFallOffMap) {print("waiting"); return; }
+
+		playerCamera.lockRotation = isCrafting;
 
 		if (!controller.isGrounded)
 		{
@@ -120,14 +131,12 @@ public class Player : MonoBehaviour
 
 		if (buildMode)
 		{
-			if (Physics.Raycast(transform.position, playerCamera.transform.forward, out RaycastHit rayInfo, attackRange))
+			if (Physics.Raycast(transform.position, playerCamera.transform.forward, out RaycastHit rayInfo, attackRange, validBuildArea))
 			{
-				if (rayInfo.collider.gameObject.name == "Terrain Mass")
-				{
-					buildPreview.transform.position = rayInfo.point;
-					buildPreview.transform.rotation = transform.rotation;
-					buildPreview.transform.rotation = builder.SnapBuildRotation(buildPreview.transform);
-				}
+				buildPreview.transform.position = rayInfo.point;
+				buildPreview.transform.rotation = transform.rotation;
+				buildPreview.transform.rotation = builder.SnapBuildRotation(buildPreview.transform);
+				buildPreview.transform.position = builder.SnapToGrid(buildPreview.transform.position, buildPreviewSize);
 			}
 		}
 
@@ -178,13 +187,10 @@ public class Player : MonoBehaviour
 		else if (heldItem.name == "Sapling")
 		{
 			print("Planting Item");
-			if (Physics.Raycast(transform.position, playerCamera.transform.forward, out RaycastHit rayInfo, attackRange))
+			if (Physics.Raycast(transform.position, playerCamera.transform.forward, out RaycastHit rayInfo, attackRange, validPlantArea))
 			{
-				if (rayInfo.collider.gameObject.name == "Terrain Mass")
-				{
-					Instantiate(simulatorData.saplingModel, rayInfo.point, transform.rotation, rayInfo.collider.gameObject.transform);
-					heldItem.count -= 1;
-				}
+				Instantiate(simulatorData.saplingModel, rayInfo.point, transform.rotation, rayInfo.collider.gameObject.transform);
+				heldItem.count -= 1;
 			}
 		}
 
@@ -193,15 +199,33 @@ public class Player : MonoBehaviour
 			buildStructure = simulatorData.structureData.playerStructures[(int)heldItem.tagData[0]];
 			if (!buildMode) {
 				buildMode = false;
-				if (Physics.Raycast(transform.position, playerCamera.transform.forward, out RaycastHit castedRay, attackRange))
+				if (Physics.Raycast(transform.position, playerCamera.transform.forward, out RaycastHit castedRay, attackRange, validBuildArea))
 				{
-					if (castedRay.collider.gameObject.name == "Terrain Mass")
-					{ 
-						buildMode = true; 
-						buildPreview = Instantiate(buildStructure.structure, castedRay.point, transform.rotation, castedRay.collider.gameObject.transform);
-						buildPreview.GetComponent<Structure>().enabled = false;
-						buildPreview.GetComponent<Collider>().enabled = false;
+					buildMode = true; 
+					buildPreview = Instantiate(buildStructure.structure, castedRay.point, transform.rotation, castedRay.collider.gameObject.transform);
+					MeshRenderer buildPreviewRenderer = buildPreview.GetComponent<MeshRenderer>();
+					if (buildPreviewRenderer != null)
+					{
+						Color buildPreviewColor = buildPreviewRenderer.material.color;
+						buildPreviewColor.a = buildPreviewTransparency;
+						buildPreviewRenderer.material.color = buildPreviewColor;
 					}
+					else
+					{
+						print("No Mesh Renderer Available");
+					}
+					BoxCollider buildPreviewCollider = buildPreview.GetComponent<BoxCollider>();
+					if (buildPreviewCollider != null)
+					{
+						buildPreviewSize = buildPreview.GetComponent<BoxCollider>().size;
+					}
+					else
+					{
+						buildPreviewSize = Vector3.zero;
+					}
+					buildPreview.GetComponent<Structure>().enabled = false;
+					buildPreview.GetComponent<Collider>().enabled = false;
+					uiHandler.SetGrid();
 				}
 				return; 
 			}
@@ -209,16 +233,9 @@ public class Player : MonoBehaviour
 			buildMode = false;
 			Destroy(buildPreview);
 
-			if (Physics.Raycast(transform.position, playerCamera.transform.forward, out RaycastHit rayInfo, attackRange))
-			{
-				if (rayInfo.collider.gameObject.name == "Terrain Mass")
-				{
-					GameObject building = Instantiate(buildStructure.structure, rayInfo.point, transform.rotation, rayInfo.collider.gameObject.transform);
-					building.transform.rotation = builder.SnapBuildRotation(building.transform);
-					building.GetComponent<Structure>().GetDataFromStructureDataPoint(buildStructure);
-					heldItem.count -= 1;
-				}
-			}
+			GameObject building = Instantiate(buildStructure.structure, buildPreview.transform.position, buildPreview.transform.rotation, buildPreview.transform.parent);
+			building.GetComponent<Structure>().GetDataFromStructureDataPoint(buildStructure);
+			heldItem.count -= 1;
 		}
 
 		if (!buildingInteration)
@@ -273,13 +290,15 @@ public class Player : MonoBehaviour
 			mostRecentAttackedStructure = structure;
 			structure.Hit(attackStrength);
 		}
+		else
+		{
+			DropItem();
+		}
 	}
 
 	public void CraftRecipe(Recipe recipe)
 	{
-		print("Crafting");
 		if (!isCrafting) return;
-		print("Valid Craft -> " + recipe.outputItems[0].name);
 
 		foreach (Item need in recipe.neededItems)
 		{
@@ -288,7 +307,9 @@ public class Player : MonoBehaviour
 				return;
 			}
 		}
-		
+
+		print("Valid Craft -> " + recipe.outputItems[0].name);
+
 		foreach (Item need in recipe.neededItems)
 		{
 			SubtractItem(need);
@@ -296,7 +317,10 @@ public class Player : MonoBehaviour
 
 		foreach (Item output in recipe.outputItems)
 		{
-			AddItem(output);
+			Item tagedItem = simulatorData.structureData.FindItem(output.name);
+			tagedItem.count = output.count;
+			tagedItem.name = output.name;
+			AddItem(tagedItem);
 		}
 
 		uiHandler.UpdateSlots();
@@ -335,7 +359,7 @@ public class Player : MonoBehaviour
 		}
 	}
 
-	// Returns if adding of item was successful
+	// Returns ture if adding of item was successful
 	public bool AddItem(Item item1)
 	{
 		for (int i = 0; i < inventory.Count; i++)
@@ -355,5 +379,19 @@ public class Player : MonoBehaviour
 			return true;
 		}
 		return false;
+	}
+
+	public void DropItem()
+	{
+		Item heldItem = uiHandler.GetHeldItem();
+		if (heldItem.name == "Empty")
+		{
+			return;
+		}
+
+		GameObject thrownItem = Instantiate(uiHandler.presetGroundedItem, transform.position + transform.forward * throwStrength, transform.rotation);
+		thrownItem.GetComponent<GroundedItem>().item = heldItem;
+		heldItem = new Item("Empty", 0);
+		uiHandler.SetHeldItem(heldItem);
 	}
 }

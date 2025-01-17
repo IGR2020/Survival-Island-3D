@@ -5,6 +5,11 @@ using System.Collections.Generic;
 public class UiHandler : MonoBehaviour
 {
 	public GameObject presetGroundedItem;
+	MeshRenderer buildGridRenderer;
+	//Assumes grid size is 10x10 (default unity plane size)
+	public GameObject buildGrid;
+	public bool showBuildGrid;
+	public float gridPlacementHeightOffset;
 	public Slider healthBar;
 	public Slider hungerBar;
 	public Slider thirstBar;
@@ -18,12 +23,21 @@ public class UiHandler : MonoBehaviour
 
 	public Player player;
 	public Sprite missingTexture;
-	public ItemSprite[] itemTextures;
+	[HideInInspector()]
+	public ItemSprite[] itemSprites;
 
 	int activeSlotIndex;
 
 	private void Start()
 	{
+		Sprite[] sprites = Resources.LoadAll<Sprite>("Items");
+		itemSprites = new ItemSprite[sprites.Length];
+		for (int i = 0; i < itemSprites.Length; i++)
+		{
+			itemSprites[i] = new ItemSprite(sprites[i].name, sprites[i]);
+		}
+
+		buildGridRenderer = buildGrid.GetComponent<MeshRenderer>();
 		craftingUi.SetActive(false);
 		craftingHandler = craftingUi.GetComponent<Crafter>();
 
@@ -32,6 +46,11 @@ public class UiHandler : MonoBehaviour
 		activeSlotIndex = 0;
 		activeSlot = slots[activeSlotIndex].gameObject;
 		LiftSlot(0);
+
+		foreach (Slot slot in slots)
+		{
+			slot.item = Slot.SetEmptyIf0(slot.item);
+		}
 
 		UpdateSlots();
 	}
@@ -60,11 +79,28 @@ public class UiHandler : MonoBehaviour
 			craftingHandler.craftConfirmed = false;
 			CraftConfirmed();
 		}
+
+		buildGrid.SetActive(player.buildMode && showBuildGrid);
+		if (player.buildMode && showBuildGrid)
+		{
+			buildGrid.transform.position = player.buildPreview.transform.position - 
+				Vector3.up * gridPlacementHeightOffset + 
+				player.buildPreviewSize.x/2 * Vector3.right + 
+				player.buildPreviewSize.z/2 * Vector3.forward;
+		}
+	}
+
+	public void SetGrid()
+	{
+		if (!showBuildGrid) { return; }
+		Material gridMat = buildGridRenderer.material;
+		gridMat.SetVector("_Tiling", new Vector4(player.buildPreviewSize.x*5, player.buildPreviewSize.z*5));
+		buildGridRenderer.material = gridMat;
 	}
 
 	public Sprite FindItemSprite(string name)
 	{
-		foreach (ItemSprite item in itemTextures)
+		foreach (ItemSprite item in itemSprites)
 		{
 			if (item.name == name)
 			{
@@ -130,4 +166,10 @@ public struct ItemSprite
 {
 	public string name;
 	public Sprite sprite;
+
+	public ItemSprite(string name, Sprite sprite)
+	{
+		this.name = name;
+		this.sprite = sprite;
+	}
 }
