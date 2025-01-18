@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 
 [RequireComponent(typeof(CharacterController))]
 public class Player : MonoBehaviour
@@ -169,7 +168,7 @@ public class Player : MonoBehaviour
 			}
 			if (interacter != null) { 
 				if (interacter.buildType == Interactable.BuildType.Crafting) uiHandler.AllowCrating();
-				if (interacter.buildType == Interactable.BuildType.Crate) interacter.GetComponent<Storage>().Activate();
+				if (interacter.buildType == Interactable.BuildType.Crate) interacter.GetComponent<ItemStorage>().Activate();
 				return;
 			}
 		}
@@ -325,7 +324,11 @@ public class Player : MonoBehaviour
 			Item tagedItem = simulatorData.structureData.FindItem(output.name);
 			tagedItem.count = output.count;
 			tagedItem.name = output.name;
-			AddItem(tagedItem);
+			if (!AddItem(tagedItem))
+			{
+				GroundedItem item = Instantiate(uiHandler.presetGroundedItem, transform.position + Vector3.up * 3, transform.rotation).GetComponent<GroundedItem>();
+				item.item = output;
+			}
 		}
 
 		uiHandler.UpdateSlots();

@@ -92,13 +92,14 @@ public class PlayerCamera : MonoBehaviour
 
 	public void OnLook(InputAction.CallbackContext context)
 	{
-		if (useMobileControls) { return; }
+		if (useMobileControls || lockRotation) { return; }
 		timeSinceLastLook = 0;
 		lookDirection += CorrectLook(context.ReadValue<Vector2>()) * sensitivity;
 	}
 
 	public void GetMobileInput()
 	{
+		if (lockRotation) return;
 		InputControl control = lookStick.control;
 
 		if (control.IsPressed())

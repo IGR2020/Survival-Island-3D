@@ -53,3 +53,13 @@ MonoBehaviour:
       count: 1
       tags: []
       tagData: []
+  - neededItems:
+    - name: Plank
+      count: 2
+      tags: []
+      tagData: []
+    outputItems:
+    - name: Fence
+      count: 1
+      tags: []
+      tagData: []

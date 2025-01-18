@@ -12,6 +12,7 @@ public class Island : MonoBehaviour
 	public StructureSummonMethod structureSummonMethod = StructureSummonMethod.PerFrame1;
 
 	StructureGenerator structureGenerator;
+	SimulatorData simulatorData;
 
 	MeshData meshData;
 
@@ -48,6 +49,9 @@ public class Island : MonoBehaviour
 		{
 			structureGenerator = gameObject.AddComponent<StructureGenerator>();
 		}
+		simulatorData = FindFirstObjectByType<SimulatorData>();
+		structureCount = simulatorData.structuresPerMass - 
+			Random.Range(-simulatorData.structureCountVariation, simulatorData.structureCountVariation);
 	}
 
 	[ContextMenu("Summon Structures")]

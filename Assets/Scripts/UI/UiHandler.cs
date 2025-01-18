@@ -14,8 +14,9 @@ public class UiHandler : MonoBehaviour
 	public Slider hungerBar;
 	public Slider thirstBar;
 	public GameObject craftingUi;
-	public GameObject inventoryUi;
+	public GameObject inventoryContainer;
 	public Crafter craftingHandler;
+	public InventoryDisplay inventoryUi;
 	public List<Slot> slots;
 	public GameObject activeSlot = null;
 
@@ -42,7 +43,7 @@ public class UiHandler : MonoBehaviour
 		craftingUi.SetActive(false);
 		craftingHandler = craftingUi.GetComponent<Crafter>();
 
-		inventoryUi.SetActive(false);
+		inventoryContainer.SetActive(false);
 
 		slotY = slots[0].GetComponent<RectTransform>().position.y;
 
@@ -66,10 +67,12 @@ public class UiHandler : MonoBehaviour
 	public void AllowCrating() 
 	{
 		craftingUi.SetActive(true);
+		craftingHandler.OnCraftClick(0);
 	}
 
 	public void CraftConfirmed()
 	{
+		if (!player.isUsingGui) return;
 		Recipe craftedRecipe = craftingHandler.GetCraftedRecipe();
 		player.CraftRecipe(craftedRecipe);
 	}
@@ -80,7 +83,7 @@ public class UiHandler : MonoBehaviour
 		hungerBar.value = Mathf.Clamp01(player.hunger / player.maxHunger);
 		thirstBar.value = Mathf.Clamp01(player.thirst / player.maxThirst);
 
-		player.isUsingGui = craftingUi.activeSelf || inventoryUi.activeSelf;
+		player.isUsingGui = craftingUi.activeSelf || inventoryContainer.activeSelf;
 
 		if (craftingHandler.craftConfirmed)
 		{
@@ -97,7 +100,6 @@ public class UiHandler : MonoBehaviour
 				player.buildPreviewSize.z/2 * Vector3.forward;
 		}
 	}
-
 	public void SetGrid()
 	{
 		if (!showBuildGrid) { return; }
@@ -156,6 +158,14 @@ public class UiHandler : MonoBehaviour
 		}
 	}
 
+	public void UpdateSlotImages()
+	{
+		foreach (Slot slot in slots)
+		{
+			slot.UpdateImage();
+		}
+	}
+
 	public Item GetHeldItem()
 	{
 		return slots[activeSlotIndex].item;
@@ -163,8 +173,18 @@ public class UiHandler : MonoBehaviour
 
 	public void SetHeldItem(Item item)
 	{
-		player.inventory[activeSlotIndex] = item;
-		if (player.inventory[activeSlotIndex].name == "Empty") player.inventory.RemoveAt(activeSlotIndex); 	
+		if (Slot.SetEmptyIf0(item).name == "Empty")
+		{
+			if (player.inventory.Count - 1 >= activeSlotIndex) player.inventory.RemoveAt(activeSlotIndex);
+		}
+		else if (player.inventory.Count - 1 < activeSlotIndex)
+		{
+			player.inventory.Add(item);
+		}
+		else
+		{
+			player.inventory[activeSlotIndex] = item;
+		}
 		ForceUpdateAllSlots();
 	}
 }

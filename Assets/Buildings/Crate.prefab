@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &3789339811877926792
+--- !u!1001 &4924185937599121237
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -12,9 +12,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Crate
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 8257fe5fd024e1640b84edb679463fd9, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 8257fe5fd024e1640b84edb679463fd9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.5152421
+      value: -10.682382
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 8257fe5fd024e1640b84edb679463fd9, type: 3}
       propertyPath: m_LocalPosition.y
@@ -22,7 +26,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 8257fe5fd024e1640b84edb679463fd9, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -7.614422
+      value: -28.073378
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 8257fe5fd024e1640b84edb679463fd9, type: 3}
       propertyPath: m_LocalRotation.w
@@ -62,29 +66,42 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 100000, guid: 8257fe5fd024e1640b84edb679463fd9, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7089915712638353318}
+      addedObject: {fileID: 1414473474330108391}
     - targetCorrespondingSourceObject: {fileID: 100000, guid: 8257fe5fd024e1640b84edb679463fd9, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2694570135625827780}
+      addedObject: {fileID: 9090051615213724253}
     - targetCorrespondingSourceObject: {fileID: 100000, guid: 8257fe5fd024e1640b84edb679463fd9, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5618564657967290655}
+      addedObject: {fileID: 8087900970424131437}
     - targetCorrespondingSourceObject: {fileID: 100000, guid: 8257fe5fd024e1640b84edb679463fd9, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6672184977161208939}
+      addedObject: {fileID: 3481949110422803460}
   m_SourcePrefab: {fileID: 100100000, guid: 8257fe5fd024e1640b84edb679463fd9, type: 3}
---- !u!1 &3789339811877957928 stripped
+--- !u!1 &4924185937599021557 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: 8257fe5fd024e1640b84edb679463fd9, type: 3}
-  m_PrefabInstance: {fileID: 3789339811877926792}
+  m_PrefabInstance: {fileID: 4924185937599121237}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &7089915712638353318
+--- !u!114 &1414473474330108391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4924185937599021557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00b9785957ccd4043aa4bcb30d4afba2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildType: 1
+--- !u!65 &9090051615213724253
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3789339811877957928}
+  m_GameObject: {fileID: 4924185937599021557}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -99,13 +116,13 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.9163016, y: 0.9166263, z: 0.9132222}
   m_Center: {x: -0.0014074445, y: 0.001183182, z: -0.00005801022}
---- !u!114 &2694570135625827780
+--- !u!114 &8087900970424131437
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3789339811877957928}
+  m_GameObject: {fileID: 4924185937599021557}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cc4de47ffb8260c49a3e9d2558c98288, type: 3}
@@ -117,30 +134,16 @@ MonoBehaviour:
     dropCountMin: 0
     dropCountMax: 0
   structureName: Crate
---- !u!114 &5618564657967290655
+--- !u!114 &3481949110422803460
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3789339811877957928}
+  m_GameObject: {fileID: 4924185937599021557}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00b9785957ccd4043aa4bcb30d4afba2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  buildType: 1
---- !u!114 &6672184977161208939
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3789339811877957928}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af58b315190223d4ea91224e79e5e045, type: 3}
+  m_Script: {fileID: 11500000, guid: c1dc3112279e2bc4ab58e03ed5eafcc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   storageCount: 20
-  inventory: {fileID: 0}

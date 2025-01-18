@@ -171,6 +171,7 @@ public class EndlessTerrain : MonoBehaviour
 			
 			meshObject = new GameObject("Terrain Mass");
 			meshRenderer = meshObject.AddComponent<MeshRenderer>();
+			meshRenderer.material = simulatorData.massMaterial;
 			meshFilter = meshObject.AddComponent<MeshFilter>();
 			meshCollider = meshObject.AddComponent<MeshCollider>();
 			StructureGenerator structureGenerator = meshObject.AddComponent<StructureGenerator>();
@@ -180,12 +181,12 @@ public class EndlessTerrain : MonoBehaviour
 			Vector3 waterPosition = positionV3 + structureGenerator.ConvertNoiseToMeshHeight(simulatorData.waterHeight) * Vector3.up;
 			GameObject water = Instantiate(simulatorData.water, waterPosition, parent.rotation);
 			water.transform.localScale = ((mapGenerator.mapMassSize - 1) / simulatorData.waterSize) * parent.localScale;
-			water.transform.parent = parent;
 
 			meshObject.transform.position = positionV3;
 			meshObject.transform.localScale = parent.localScale;
 			meshObject.transform.parent = parent;
 			meshObject.layer = LayerMask.NameToLayer(layer);
+			water.transform.SetParent(meshObject.transform, true);
 
 			SetVisible(false);
 

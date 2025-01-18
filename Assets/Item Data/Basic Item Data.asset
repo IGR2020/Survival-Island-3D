@@ -55,3 +55,9 @@ MonoBehaviour:
     count: 0
     tags: []
     tagData: []
+  - name: Fence
+    count: 0
+    tags:
+    - Build
+    tagData:
+    - 5

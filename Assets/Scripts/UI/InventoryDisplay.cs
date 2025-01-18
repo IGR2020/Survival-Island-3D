@@ -15,6 +15,7 @@ public class InventoryDisplay : MonoBehaviour
     {
         slotCount = count;
         slotUis = Crafter.ClearGameObjectList(slotUis);
+        slots.Clear();
 
 		for (int i = 0; i < slotCount; i++) 
         {
@@ -25,7 +26,23 @@ public class InventoryDisplay : MonoBehaviour
         }
     }
 
-    public void OnSlotClicked(int index)
+    public void SetSlotItems(Item[] items)
+    {
+        for (int i = 0; i < items.Length; i++) 
+        {
+            slots[i].item = items[i];
+        }
+    }
+
+	public void UpdateSlotImages()
+	{
+		foreach (Slot slot in slots)
+        {
+            slot.UpdateImage();
+        }
+	}
+
+	public void OnSlotClicked(int index)
     {
         activeSlot = index;
         if (onClickCallback == null) return;

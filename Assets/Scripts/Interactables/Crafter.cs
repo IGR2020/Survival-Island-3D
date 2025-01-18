@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
 using NUnit.Framework;
+using UnityEditor.UI;
 
 public class Crafter : MonoBehaviour
 {
@@ -16,12 +17,10 @@ public class Crafter : MonoBehaviour
 	public int activeButton = 0;
 	// Responsibility of uiHandler to reset this
 	[HideInInspector()]
-	public bool craftConfirmed = true;
+	public bool craftConfirmed = false;
 	private void Start()
 	{
 		CreateGUI();
-
-		OnCraftClick(activeButton);
 	}
 
 	public void CreateGUI()
@@ -39,6 +38,7 @@ public class Crafter : MonoBehaviour
 
 	public void ConfirmCraft()
 	{
+		if (!gameObject.activeSelf) return;
 		craftConfirmed = true;
 	}
 

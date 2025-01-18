@@ -61,6 +61,7 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.29f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Sun.cs" />
     <Compile Include="Assets\Scripts\Structure\Interactable.cs" />
     <Compile Include="Assets\Bitgem\StylisedWater\URP\Scripts\Bitgem\VFX\StylisedWater\WaterVolumeBox.cs" />
     <Compile Include="Assets\Scripts\MapGenerator.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="Assets\Scripts\UI\InventoryDisplay.cs" />
     <Compile Include="Assets\Scripts\Interactables\ItemData.cs" />
     <Compile Include="Assets\Scripts\UI\UiHandler.cs" />
+    <Compile Include="Assets\Scripts\Interactables\ItemStorage.cs" />
     <Compile Include="Assets\Scripts\Interactables\Crafter.cs" />
     <Compile Include="Assets\Scripts\UI\CloseButton.cs" />
     <Compile Include="Assets\Scripts\Interactables\CraftingData.cs" />
@@ -93,7 +95,6 @@
     <Compile Include="Assets\Scripts\UI\Slot.cs" />
     <Compile Include="Assets\Scripts\UI\PlayButton.cs" />
     <Compile Include="Assets\Scripts\StructureGenerator.cs" />
-    <Compile Include="Assets\Scripts\Interactables\Storage.cs" />
     <Compile Include="Assets\Scripts\Structure.cs" />
     <Compile Include="Assets\Scripts\UI\SceneLoader.cs" />
     <Compile Include="Assets\Scripts\RegionData.cs" />

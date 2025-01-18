@@ -4,6 +4,9 @@ public class SimulatorData : MonoBehaviour
 {
     public float hitDelay;
 
+    public int structuresPerMass = 10;
+    public int structureCountVariation = 3;
+    public Material massMaterial;
     public Material hitMaterial;
     public StructureData structureData;
     public GameObject water;
