@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(CharacterController))]
 public class Player : MonoBehaviour
 {
+	public GameObject deathScene;
 	public float gravity;
 	public float speed;
 	public float acceleration;
@@ -50,7 +51,6 @@ public class Player : MonoBehaviour
 	[HideInInspector()]
 	public Building builder;
 	UiHandler uiHandler;
-	Structure mostRecentAttackedStructure;
 
 	bool isGroundedLastFrame = false;
 
@@ -77,8 +77,7 @@ public class Player : MonoBehaviour
 		builder = FindFirstObjectByType<Building>();
 		//animator = GetComponent<Animator>();
 
-		transform.position += Vector3.up * mapGenerator.terrainData.noiseAmplification * mapGenerator.transform.localScale.x;
-
+		transform.position = Vector3.up * mapGenerator.terrainData.noiseAmplification * mapGenerator.transform.localScale.x;
 	}
 
 	private void Update()
@@ -125,7 +124,20 @@ public class Player : MonoBehaviour
 
 		if (health < 1)
 		{
-			SceneLoader.Load(SceneLoader.SceneName.DeathScreen);
+			uiHandler.SlotPressed(0);
+			int itemsInInventory = inventory.Count;
+			for (int i = 0; i < itemsInInventory; i++)
+			{
+				DropItem();
+			}
+			health = maxHealth;
+			thirst = maxThirst;
+			hunger = maxThirst;
+			inventory.Clear();
+			transform.position = Vector3.up * mapGenerator.terrainData.noiseAmplification * mapGenerator.transform.localScale.x;
+			deathScene.SetActive(true);
+			transform.parent.gameObject.SetActive(false);
+			return;
 		}
 
 		if (buildMode)
@@ -133,7 +145,7 @@ public class Player : MonoBehaviour
 			if (Physics.Raycast(transform.position, playerCamera.transform.forward, out RaycastHit rayInfo, attackRange, validBuildArea))
 			{
 				buildPreview.transform.position = rayInfo.point;
-				buildPreview.transform.rotation = transform.rotation;
+				buildPreview.transform.rotation = Quaternion.Euler(transform.eulerAngles + buildRotationOffset);
 				buildPreview.transform.rotation = builder.SnapBuildRotation(buildPreview.transform);
 				buildPreview.transform.position = builder.SnapToGrid(buildPreview.transform.position, buildPreviewSize);
 			}
@@ -171,6 +183,13 @@ public class Player : MonoBehaviour
 				if (interacter.buildType == Interactable.BuildType.Crate) interacter.GetComponent<ItemStorage>().Activate();
 				return;
 			}
+			else if (ray.collider.gameObject.layer == 4)
+			{
+				thirst += 5;
+				thirst = Mathf.Min(thirst, maxThirst);
+				return;
+			}
+
 		}
 
 		Item heldItem = uiHandler.GetHeldItem();
@@ -184,6 +203,7 @@ public class Player : MonoBehaviour
 			print("Consuming Food");
 			int index = heldItem.tags.IndexOf("Food");
 			hunger += heldItem.tagData[index];
+			hunger = Mathf.Min(hunger, maxHunger);
 			heldItem.count -= 1;
 		}
 
@@ -193,6 +213,16 @@ public class Player : MonoBehaviour
 			if (Physics.Raycast(transform.position, playerCamera.transform.forward, out RaycastHit rayInfo, attackRange, validPlantArea))
 			{
 				Instantiate(simulatorData.saplingModel, rayInfo.point, transform.rotation, rayInfo.collider.gameObject.transform);
+				heldItem.count -= 1;
+			}
+		}
+
+		else if (heldItem.name == "Wheat Seed")
+		{
+			print("Planting Crop");
+			if (Physics.Raycast(transform.position, playerCamera.transform.forward, out RaycastHit rayInfo, attackRange, validPlantArea))
+			{
+				Instantiate(simulatorData.wheatSeedModel, rayInfo.point, transform.rotation, rayInfo.collider.gameObject.transform);
 				heldItem.count -= 1;
 			}
 		}
@@ -279,12 +309,10 @@ public class Player : MonoBehaviour
 
 	public void OnAttack(InputAction.CallbackContext context) 
 	{
-		if (!context.canceled)
+		if (!context.canceled || isUsingGui)
 		{
 			return;
 		}
-
-		if (isUsingGui) return;
 
 		if (Physics.Raycast(transform.position, playerCamera.transform.forward, out RaycastHit hitInfo, attackRange))
 		{
@@ -295,7 +323,6 @@ public class Player : MonoBehaviour
 			{
 				return;
 			}
-			mostRecentAttackedStructure = structure;
 			structure.Hit(attackStrength);
 		}
 	}
@@ -398,6 +425,7 @@ public class Player : MonoBehaviour
 		}
 
 		GameObject thrownItem = Instantiate(uiHandler.presetGroundedItem, transform.position + transform.forward * throwStrength, transform.rotation);
+		thrownItem.transform.parent = transform.parent;
 		thrownItem.GetComponent<GroundedItem>().item = heldItem;
 		heldItem = new Item("Empty", 0);
 		uiHandler.SetHeldItem(heldItem);

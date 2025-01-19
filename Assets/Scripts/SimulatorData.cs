@@ -4,7 +4,7 @@ public class SimulatorData : MonoBehaviour
 {
     public float hitDelay;
 
-    public int structuresPerMass = 10;
+	public int structuresPerMass = 10;
     public int structureCountVariation = 3;
     public Material massMaterial;
     public Material hitMaterial;
@@ -13,7 +13,9 @@ public class SimulatorData : MonoBehaviour
     public float waterSize;
     public float waterHeight;
     public GameObject saplingModel;
+    public GameObject wheatSeedModel;
     public SaplingData sapaplingData;
+    public SaplingData wheatData;
 
     public StructureDataPoint GetStructureDataFromName(string name)
     {

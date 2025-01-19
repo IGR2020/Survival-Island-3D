@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a4217a2303e9a344eaac510eaa83863b, type: 3}
-  m_Name: Default Noise Data
+  m_Name: Big Map
   m_EditorClassIdentifier: 
   useFallOff: 0
-  maxFallOffHeight: 0.03
-  seed: 16
+  maxFallOffHeight: 0.1
+  seed: 4
   octaves: 4
   lacularity: 2
   persistence: 0.5
-  mapScale: 0.01
+  mapScale: 0.002
   mapOffset: {x: 0, y: 0}

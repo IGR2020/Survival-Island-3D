@@ -74,7 +74,7 @@ public class StructureGenerator : MonoBehaviour
 			maxHeight = ConvertNoiseToMeshHeight(maxHeight);
 		}
 
-		for (int i = 0; i < meshData.vertices.Length; i++)
+		for (int i = 0; i < meshData.vertices.Length; i+= mapGenerator.structurePlacementSkipping)
 		{
 			Vector3 vertex = meshData.vertices[i];
 
@@ -84,7 +84,8 @@ public class StructureGenerator : MonoBehaviour
 				if (Vector3.Distance(vertex, offsetVertex) < 3) {
 					vertex = Vector3.Lerp(vertex, offsetVertex, Random.value);
 					CheckAndAddIfInvalidPoint(vertex, spacing);
-				} }
+				} 
+			}
 
 			if (invalidAreas.Contains(vertex))
 			{

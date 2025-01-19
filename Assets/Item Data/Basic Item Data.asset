@@ -61,3 +61,13 @@ MonoBehaviour:
     - Build
     tagData:
     - 5
+  - name: Wheat Seed
+    count: 0
+    tags: []
+    tagData: []
+  - name: Wheat
+    count: 0
+    tags:
+    - Food
+    tagData:
+    - 3

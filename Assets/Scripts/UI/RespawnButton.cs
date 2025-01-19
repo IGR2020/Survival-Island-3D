@@ -2,8 +2,11 @@ using UnityEngine;
 
 public class RespawnButton : MonoBehaviour
 {
+    public GameObject otherSceneContainer;
+
     public void OnClick()
     {
-        SceneLoader.Load(SceneLoader.SceneName.IslandSurvival);
+        otherSceneContainer.SetActive(true);
+        transform.parent.gameObject.SetActive(false);
     }
 }

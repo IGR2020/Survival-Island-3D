@@ -98,7 +98,7 @@ public class Structure : MonoBehaviour
 			Item drop = simulator.structureData.FindItem(drops.drops[i]);
 			drop.count = Random.Range(drops.dropCountMin, drops.dropCountMax);
 
-			GroundedItem item = Instantiate(uiHandler.presetGroundedItem, transform.position + Vector3.up * 3, transform.rotation).GetComponent<GroundedItem>();
+			GroundedItem item = Instantiate(uiHandler.presetGroundedItem, transform.position + Vector3.up * 3, transform.rotation, transform.parent).GetComponent<GroundedItem>();
 			item.item = drop;
 		}
 			Destroy(gameObject);

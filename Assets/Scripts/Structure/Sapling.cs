@@ -6,6 +6,9 @@ public class Sapling : MonoBehaviour
 	float growTimer = 0;
 	float growSpeed;
 	string growthVarient;
+	public enum PlantType {Sapling, Wheat};
+	public PlantType plantType;
+	string dataPointName = "Sapling";
 
 	private void Start()
 	{
@@ -13,7 +16,9 @@ public class Sapling : MonoBehaviour
 
 		AssignGrowthVars();
 
-		GetComponent<Structure>().GetDataFromStructureDataPoint(simulatorData.structureData.FindPlayerStructure("Sapling"));
+		SetDataPointName();
+
+		GetComponent<Structure>().GetDataFromStructureDataPoint(simulatorData.structureData.FindPlayerStructure(dataPointName));
 	}
 
 	private void Update()
@@ -26,9 +31,17 @@ public class Sapling : MonoBehaviour
 		}
 	}
 
+	public void SetDataPointName()
+	{
+
+		if (plantType == PlantType.Sapling) dataPointName = "Sapling";
+		else if (plantType == PlantType.Wheat) dataPointName = "Wheat";
+	}
+
 	public void OnGrow()
 	{
 		StructureDataPoint structure = simulatorData.GetStructureDataFromName(growthVarient);
+		if (structure.structure == null) { structure = simulatorData.structureData.FindPlayerStructure(growthVarient); }
 		GameObject grownVersion = Instantiate(structure.structure, transform.position, transform.rotation);
 		grownVersion.GetComponent<Structure>().GetDataFromStructureDataPoint(structure);
 		Destroy(gameObject);
@@ -36,9 +49,15 @@ public class Sapling : MonoBehaviour
 
 	public void AssignGrowthVars()
 	{
+		SetDataPointName();
+
+		SaplingData growData = simulatorData.sapaplingData;
+		if (dataPointName == "Sapling") growData = simulatorData.sapaplingData;
+		else if (dataPointName == "Wheat") growData = simulatorData.wheatData;
+
 		growTimer = 0;
-		growSpeed = simulatorData.sapaplingData.growSpeed + (((Random.value * 2) - 1) * simulatorData.sapaplingData.growSpeedVariation);
-		growthVarient = simulatorData.sapaplingData.growVarients[Random.Range(0, simulatorData.sapaplingData.growVarients.Length - 1)];
+		growSpeed = growData.growSpeed + (((Random.value * 2) - 1) * growData.growSpeedVariation);
+		growthVarient = growData.growVarients[Random.Range(0, growData.growVarients.Length - 1)];
 	}
 }
 
