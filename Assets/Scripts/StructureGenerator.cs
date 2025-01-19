@@ -74,7 +74,7 @@ public class StructureGenerator : MonoBehaviour
 			maxHeight = ConvertNoiseToMeshHeight(maxHeight);
 		}
 
-		for (int i = 0; i < meshData.vertices.Length; i+= mapGenerator.structurePlacementSkipping)
+		for (int i = 0; i < meshData.vertices.Length; i += Random.Range(mapGenerator.structurePlacementSkippingMin, mapGenerator.structurePlacementSkippingMax))
 		{
 			Vector3 vertex = meshData.vertices[i];
 

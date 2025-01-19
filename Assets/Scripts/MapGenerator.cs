@@ -11,7 +11,8 @@ public class MapGenerator : MonoBehaviour
 	public NoiseData noiseData;
 	public TerrainData terrainData;
 
-	public int structurePlacementSkipping = 1;
+	public int structurePlacementSkippingMin = 1;
+	public int structurePlacementSkippingMax = 1;
 
 	TextureGenrator textureGenrator;
 
